@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 class MovieListViewModel: ObservableObject {
     @Published var movies: [Movie] = []
     @Published var isLoading = false
@@ -23,5 +24,13 @@ class MovieListViewModel: ObservableObject {
             self.errorMessage = error.localizedDescription
         }
         isLoading = false
+    }
+    
+    var categorizedMovies: [String: [Movie]] {
+        Dictionary(grouping: movies, by: { $0.category })
+    }
+    
+    var sortedCategories: [String] {
+        categorizedMovies.keys.sorted()
     }
 }

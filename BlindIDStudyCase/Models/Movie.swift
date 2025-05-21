@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct Movie: Codable {
+struct Movie: Codable, Identifiable {
     let id: Int
     let title: String
     let year: Int
-    let rating: Double
+    let rating: Decimal
     let actors: [String]
     let category: String
     let posterUrl: String

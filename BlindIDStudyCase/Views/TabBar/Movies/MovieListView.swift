@@ -8,8 +8,39 @@
 import SwiftUI
 
 struct MovieListView: View {
+    @StateObject private var viewModel = MovieListViewModel()
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            Group {
+                if viewModel.isLoading {
+                    ProgressView("Loading movies...")
+                } else if let error = viewModel.errorMessage {
+                    Text("Error: \(error)")
+                        .foregroundColor(.red)
+                } else {
+                    ScrollView {
+                        LazyVStack(alignment: .leading, spacing: 24) {
+                            ForEach(viewModel.sortedCategories, id: \.self) { category in
+                                if let movies = viewModel.categorizedMovies[category] {
+                                    CategorySectionView(category: category, movies: movies)
+                                }
+                            }
+                        }
+                        .padding(.top)
+                        .padding(.leading, 8)
+                    }
+                    .refreshable {
+                        try? await Task.sleep(nanoseconds: 600_000_000)
+                        await viewModel.fetchMovies()
+                    }
+                }
+            }
+            .navigationTitle("Movies")
+            .task {
+                await viewModel.fetchMovies()
+            }
+        }
     }
 }
 

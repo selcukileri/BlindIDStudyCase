@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		B635E26A2DDE6BC60089C86A /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = B635E2692DDE6BC60089C86A /* SDWebImageSwiftUI */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		EA0DC27A2DDDC52E00A97ED1 /* BlindIDStudyCase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlindIDStudyCase.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B635E26A2DDE6BC60089C86A /* SDWebImageSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = BlindIDStudyCase;
 			packageProductDependencies = (
+				B635E2692DDE6BC60089C86A /* SDWebImageSwiftUI */,
 			);
 			productName = BlindIDStudyCase;
 			productReference = EA0DC27A2DDDC52E00A97ED1 /* BlindIDStudyCase.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = EA0DC2712DDDC52E00A97ED1;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				B635E2682DDE6BC60089C86A /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EA0DC27B2DDDC52E00A97ED1 /* Products */;
 			projectDirPath = "";
@@ -322,6 +331,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B635E2682DDE6BC60089C86A /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B635E2692DDE6BC60089C86A /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B635E2682DDE6BC60089C86A /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = EA0DC2722DDDC52E00A97ED1 /* Project object */;
 }
