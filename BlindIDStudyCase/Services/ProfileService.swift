@@ -13,7 +13,7 @@ class ProfileService {
 
     private let baseURL = "https://moviatask.cerasus.app"
     
-    func fetchProfile() async throws -> User {
+    func fetchProfile() async throws -> Profile {
         
         guard let token = KeychainHelper.shared.read(key: "userToken"), !token.isEmpty else {
             throw CustomError.unauthorized
@@ -26,6 +26,7 @@ class ProfileService {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         let (data, response) = try await URLSession.shared.data(for: request)
         
@@ -38,7 +39,7 @@ class ProfileService {
         }
         
         do {
-            return try JSONDecoder().decode(User.self, from: data)
+            return try JSONDecoder().decode(Profile.self, from: data)
         } catch {
             throw CustomError.decodingFailed
         }

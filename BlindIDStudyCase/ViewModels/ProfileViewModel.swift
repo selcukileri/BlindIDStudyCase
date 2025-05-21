@@ -7,8 +7,9 @@
 
 import Foundation
 
+@MainActor
 class ProfileViewModel: ObservableObject {
-    @Published var user: User?
+    @Published var profile: Profile?
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     
@@ -17,8 +18,8 @@ class ProfileViewModel: ObservableObject {
         errorMessage = nil
         
         do {
-            let user = try await ProfileService.shared.fetchProfile()
-            self.user = user
+            let profile = try await ProfileService.shared.fetchProfile()
+            self.profile = profile
         } catch {
             self.errorMessage = error.localizedDescription
         }
