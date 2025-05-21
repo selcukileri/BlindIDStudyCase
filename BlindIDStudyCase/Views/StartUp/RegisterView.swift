@@ -16,6 +16,7 @@ struct RegisterView: View {
     @State private var password = ""
     
     @State private var isRegistered = false
+    @State private var goToLogin = false
     
     var body: some View {
         NavigationStack {
@@ -43,7 +44,6 @@ struct RegisterView: View {
                 HStack {
                     Text("Already have an account?")
                         .foregroundColor(.secondary)
-
                     NavigationLink(destination: LoginView()) {
                         Text("Login")
                             .font(.subheadline.weight(.semibold))
@@ -64,8 +64,9 @@ struct RegisterView: View {
             .padding(.horizontal)
             .navigationTitle("Register")
             .navigationBarTitleDisplayMode(.large)
-            .navigationDestination(isPresented: $isRegistered) {
-                LoginView()
+            .navigationBarBackButtonHidden(true)
+            .fullScreenCover(isPresented: $isRegistered) {
+                MainView()
             }
             .onChange(of: viewModel.token) { _, newValue in
                 isRegistered = newValue != nil

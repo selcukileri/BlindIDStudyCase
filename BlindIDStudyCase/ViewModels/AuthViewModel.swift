@@ -21,6 +21,8 @@ class AuthViewModel: ObservableObject {
                 let saved = KeychainHelper.shared.save(key: "userToken", value: response.token)
                 if !saved {
                     print("token couldnt be saved")
+                } else {
+                    print("token saved")
                 }
             } catch let error as CustomError {
                 self.errorMessage = error.localizedDescription
@@ -35,6 +37,12 @@ class AuthViewModel: ObservableObject {
             do {
                 let response = try await AuthService.shared.register(name: name, surname: surname, email: email, password: password)
                 self.token = response.token
+                let saved = KeychainHelper.shared.save(key: "userToken", value: response.token)
+                if !saved {
+                    print("token couldnt be saved")
+                } else {
+                    print("token saved")
+                }
             } catch let error as CustomError {
                 self.errorMessage = error.localizedDescription
             } catch {

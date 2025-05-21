@@ -59,7 +59,8 @@ struct LoginView: View {
             .padding(.horizontal)
             .navigationTitle("Login")
             .navigationBarTitleDisplayMode(.large)
-            .navigationDestination(isPresented: $isRegistered) {
+            .navigationBarBackButtonHidden(true)
+            .fullScreenCover(isPresented: $isRegistered) {
                 MainView()
             }
             .onChange(of: viewModel.token) { _, newValue in
