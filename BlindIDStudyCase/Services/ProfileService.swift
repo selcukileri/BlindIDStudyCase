@@ -1,5 +1,5 @@
 //
-//  MovieService.swift
+//  ProfileService.swift
 //  BlindIDStudyCase
 //
 //  Created by Selçuk İleri on 21.05.2025.
@@ -7,14 +7,19 @@
 
 import Foundation
 
-class MovieService {
-    static let shared = MovieService()
+class ProfileService {
+    static let shared = ProfileService()
     private init() {}
 
     private let baseURL = "https://moviatask.cerasus.app"
     
-    func fetchMovies() async throws -> [Movie] {
-        guard let url = URL(string: "\(baseURL)/api/movies") else {
+    func fetchProfile() async throws -> User {
+        
+        guard let token = KeychainHelper.shared.read(key: "userToken"), !token.isEmpty else {
+            throw CustomError.unauthorized
+        }
+        
+        guard let url = URL(string: "\(baseURL)/api/auth/me") else {
             throw URLError(.badURL)
         }
         
@@ -33,12 +38,9 @@ class MovieService {
         }
         
         do {
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
-            return try decoder.decode([Movie].self, from: data)
+            return try JSONDecoder().decode(User.self, from: data)
         } catch {
             throw CustomError.decodingFailed
         }
     }
-    
 }

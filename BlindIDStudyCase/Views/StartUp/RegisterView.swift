@@ -66,7 +66,7 @@ struct RegisterView: View {
             .navigationBarTitleDisplayMode(.large)
             .navigationBarBackButtonHidden(true)
             .fullScreenCover(isPresented: $isRegistered) {
-                MainView()
+                TabBarController()
             }
             .onChange(of: viewModel.token) { _, newValue in
                 isRegistered = newValue != nil

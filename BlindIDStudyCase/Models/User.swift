@@ -9,10 +9,11 @@ import Foundation
 
 struct AuthResponse: Codable {
     let token: String
+    let user: User
 }
 
-struct AppUser: Codable {
-    let id: Int
+struct User: Codable {
+    let id: String
     let name: String
     let surname: String
     let email: String
