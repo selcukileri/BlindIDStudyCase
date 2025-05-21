@@ -33,17 +33,18 @@ struct LoginView: View {
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color(.clrGreen))
+                        .background(Color.clrGreen)
                         .cornerRadius(10)
                 }
                 HStack {
                     Text("Don't have an account?")
-                    
+                        .foregroundColor(.secondary)
+
                     NavigationLink("Register") {
                         RegisterView()
                     }
                     .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(Color(UIColor.clrGreen))
+                    .foregroundColor(Color.clrGreen)
                 }
                 .padding(.top, 8)
 

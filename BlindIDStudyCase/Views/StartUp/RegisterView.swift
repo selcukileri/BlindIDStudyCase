@@ -36,19 +36,21 @@ struct RegisterView: View {
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color(.clrGreen))
+                        .background(Color.clrGreen)
                         .cornerRadius(10)
                 }
                 
                 HStack {
                     Text("Already have an account?")
-                    
-                    NavigationLink("Login") {
-                        LoginView()
+                        .foregroundColor(.secondary)
+
+                    NavigationLink(destination: LoginView()) {
+                        Text("Login")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundColor(Color.clrGreen)
                     }
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(Color(UIColor.clrGreen))
                 }
+                .padding(.top, 8)
 
 
                 if let error = viewModel.errorMessage {
