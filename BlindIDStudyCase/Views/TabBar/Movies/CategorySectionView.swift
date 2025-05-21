@@ -18,11 +18,14 @@ struct CategorySectionView: View {
                 .padding(.horizontal)
 
             ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack(spacing: 16) {
-                    ForEach(movies) { movie in
-                        MovieCardView(movie: movie)
-                    }
-                }
+                       LazyHStack(spacing: 16) {
+                           ForEach(movies) { movie in
+                               NavigationLink(destination: MovieDetailView(movieID: movie.id)) {
+                                   MovieCardView(movie: movie)
+                               }
+                               .buttonStyle(.plain) 
+                           }
+                       }
                 .padding(.horizontal)
             }
         }

@@ -41,4 +41,32 @@ class MovieService {
         }
     }
     
+    func fetchMovieDetails(movieId: Int) async throws -> Movie {
+        guard let url = URL(string: "\(baseURL)/api/movies/\(movieId)") else {
+            throw URLError(.badURL)
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw CustomError.invalidResponse
+        }
+        
+        guard (200..<300).contains(httpResponse.statusCode) else {
+            throw CustomError.httpError(statusCode: httpResponse.statusCode)
+        }
+        
+        do {
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            return try decoder.decode(Movie.self, from: data)
+        } catch {
+            throw CustomError.decodingFailed
+        }
+    }
+    
 }

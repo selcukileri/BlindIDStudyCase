@@ -8,8 +8,9 @@
 import Foundation
 
 @MainActor
-class MovieListViewModel: ObservableObject {
+class MoviesViewModel: ObservableObject {
     @Published var movies: [Movie] = []
+    @Published var movieDetails: Movie?
     @Published var isLoading = false
     @Published var errorMessage: String?
     
@@ -32,5 +33,18 @@ class MovieListViewModel: ObservableObject {
     
     var sortedCategories: [String] {
         categorizedMovies.keys.sorted()
+    }
+    
+    func fetchMovieDetails(with movieID: Int) async {
+        isLoading = true
+        errorMessage = nil
+        
+        do {
+            let movieDetails = try await MovieService.shared.fetchMovieDetails(movieId: movieID)
+            self.movieDetails = movieDetails
+        } catch {
+            self.errorMessage = error.localizedDescription
+        }
+        isLoading = false
     }
 }
