@@ -1,18 +1,18 @@
 //
-//  MainView.swift
+//  MovieListView.swift
 //  BlindIDStudyCase
 //
-//  Created by Selcuk on 21.05.2025.
+//  Created by Selçuk İleri on 21.05.2025.
 //
 
 import SwiftUI
 
-struct MainView: View {
+struct MovieListView: View {
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
     }
 }
 
 #Preview {
-    MainView()
+    MovieListView()
 }
