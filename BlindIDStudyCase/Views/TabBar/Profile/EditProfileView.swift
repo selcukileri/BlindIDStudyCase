@@ -46,20 +46,13 @@ struct EditProfileView: View {
                                 email: email.isEmpty ? nil : email,
                                 password: password.isEmpty ? nil : password
                             )
-                            showAlert = true
-
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                                showAlert = false
-                                viewModel.alertMessage = nil
-                                Task {
-                                    await viewModel.fetchProfile()
-                                    dismiss()
-                                }
-                            }
+                            await viewModel.fetchProfile()
+                            dismiss()
                         }
                     }
                 }
             }
+            .timedAlert(message: $viewModel.alertMessage)
             .onAppear {
                 name = viewModel.profile?.name ?? ""
                 surname = viewModel.profile?.surname ?? ""

@@ -97,7 +97,6 @@ struct MovieDetailView: View {
                 }
             }
         }
-        .alert(alertText ?? "", isPresented: $showAlert) { }
         .task {
             await viewModel.fetchMovieDetails(with: movieID)
             if let movie = viewModel.movieDetails,
@@ -105,16 +104,7 @@ struct MovieDetailView: View {
                 isFavorite = profile.likedMovies.contains(movie.id)
             }
         }
-        .onReceive(viewModel.$alertMessage.compactMap { $0 }) { message in
-            alertText = message
-            showAlert = true
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                showAlert = false
-                alertText = nil
-                viewModel.alertMessage = nil
-            }
-        }
+        timedAlert(message: $viewModel.alertMessage)
     }
 }
 
