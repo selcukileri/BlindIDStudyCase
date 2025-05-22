@@ -17,33 +17,35 @@ struct MovieCardView: View {
             ZStack(alignment: .topTrailing) {
                 Rectangle()
                     .fill(Color.gray.opacity(0.1))
-                    .frame(width: 120, height: 180)
+                    .frame(width: 140, height: 210)
                     .cornerRadius(8)
                 
                 WebImage(url: URL(string: movie.posterUrl))
                     .resizable()
                     .scaledToFill()
-                    .frame(width: 120, height: 180)
+                    .frame(width: 140, height: 210)
                     .clipped()
                     .cornerRadius(8)
             }
             
-            HStack(alignment: .top, spacing: 4) {
-                Text(movie.title)
-                    .font(.headline)
-                    .lineLimit(2)
-                    .multilineTextAlignment(.leading)
+            Text(movie.title)
+                .font(.headline)
+                .lineLimit(2)
+                .multilineTextAlignment(.leading)
+            
+            HStack(spacing: 4) {
+                Text("\(movie.year.description) • \(movie.rating)")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .lineLimit(1)
                 
                 if isFavorite {
                     Image(systemName: "heart.fill")
                         .foregroundColor(.red)
+                        .font(.caption)
                 }
             }
-            Text("\(movie.year.description) • \(movie.rating)")
-                .font(.caption)
-                .foregroundColor(.secondary)
-                .lineLimit(1)
         }
-        .frame(width: 120)
+        .frame(width: 140)
     }
 }
