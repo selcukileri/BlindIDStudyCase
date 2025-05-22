@@ -13,13 +13,19 @@ struct MovieCardView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            WebImage(url: URL(string: movie.posterUrl))
-                .resizable()
-                .indicator(.activity)
-                .scaledToFill()
-                .frame(width: 140, height: 180)
-                .clipped()
-                .cornerRadius(8)
+            ZStack {
+                Rectangle()
+                    .fill(Color.gray.opacity(0.1))
+                    .frame(width: 120, height: 180)
+                    .cornerRadius(8)
+
+                WebImage(url: URL(string: movie.posterUrl))
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 120, height: 180)
+                    .clipped()
+                    .cornerRadius(8)
+            }
             Text(movie.title)
                 .font(.headline)
                 .lineLimit(2)

@@ -23,10 +23,11 @@ struct CategorySectionView: View {
                                NavigationLink(destination: MovieDetailView(movieID: movie.id)) {
                                    MovieCardView(movie: movie)
                                }
-                               .buttonStyle(.plain) 
+                               .padding(.horizontal, 8)
+                               .buttonStyle(.plain)
                            }
                        }
-                .padding(.horizontal)
+                .padding(.horizontal, 8)
             }
         }
     }
