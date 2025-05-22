@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MovieListView: View {
-    @StateObject private var viewModel = MoviesViewModel()
+    @StateObject var viewModel = MoviesViewModel()
 
     var body: some View {
         NavigationStack {
@@ -23,7 +23,11 @@ struct MovieListView: View {
                         LazyVStack(alignment: .leading, spacing: 24) {
                             ForEach(viewModel.sortedCategories, id: \.self) { category in
                                 if let movies = viewModel.categorizedMovies[category] {
-                                    CategorySectionView(category: category, movies: movies)
+                                    CategorySectionView(
+                                        category: category,
+                                        movies: movies,
+                                        likedMovieIDs: viewModel.likedMovieIDs
+                                    )
                                 }
                             }
                         }
@@ -33,12 +37,15 @@ struct MovieListView: View {
                     .refreshable {
                         try? await Task.sleep(nanoseconds: 600_000_000)
                         await viewModel.fetchMovies()
+                        await viewModel.fetchLikedMovieIDs()
                     }
                 }
             }
             .navigationTitle("Movies")
             .task {
-                await viewModel.fetchMovies()
+                async let moviesTask: () = viewModel.fetchMovies()
+                async let likedTask: () = viewModel.fetchLikedMovieIDs()
+                _ = await (moviesTask, likedTask)
             }
         }
     }

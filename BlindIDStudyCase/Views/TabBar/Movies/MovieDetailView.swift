@@ -11,6 +11,7 @@ import SDWebImageSwiftUI
 struct MovieDetailView: View {
     let movieID: Int
     @StateObject private var viewModel = MoviesViewModel()
+    @State private var isFavorite: Bool = false
 
     var body: some View {
         Group {
@@ -43,6 +44,7 @@ struct MovieDetailView: View {
                                 .foregroundColor(.yellow)
                             
                             Text("\(movie.rating)")
+                            
                         }
                         
                         .font(.subheadline)
@@ -76,8 +78,35 @@ struct MovieDetailView: View {
         .navigationTitle("Movie Details")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    isFavorite.toggle()
+                    Task {
+                        if isFavorite {
+                            try? await MovieService.shared.likeMovie(with: movieID)
+                        } else {
+                            try? await MovieService.shared.unlikeMovie(with: movieID)
+                        }
+                    }
+                }) {
+                    Image(systemName: isFavorite ? "heart.fill" : "heart")
+                        .foregroundColor(.red)
+                }
+            }
+        }
+        .alert(viewModel.alertMessage ?? "", isPresented: Binding(
+            get: { viewModel.alertMessage != nil },
+            set: { if !$0 { viewModel.alertMessage = nil } }
+        )) {
+            Button("OK", role: .cancel) { }
+        }
         .task {
             await viewModel.fetchMovieDetails(with: movieID)
+            if let movie = viewModel.movieDetails,
+               let profile = try? await ProfileService.shared.fetchProfile() {
+                isFavorite = profile.likedMovies.contains(movie.id)
+            }
         }
     }
 }

@@ -17,3 +17,7 @@ struct Movie: Codable, Identifiable {
     let posterUrl: String
     let description: String
 }
+
+struct MessageResponse: Codable {
+    let message: String
+}
