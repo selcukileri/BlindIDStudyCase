@@ -12,6 +12,8 @@ struct MovieDetailView: View {
     let movieID: Int
     @StateObject private var viewModel = MoviesViewModel()
     @State private var isFavorite: Bool = false
+    @State private var showAlert = false
+    @State private var alertText: String?
 
     var body: some View {
         Group {
@@ -20,10 +22,6 @@ struct MovieDetailView: View {
                     VStack(alignment: .leading, spacing: 16) {
                         WebImage(url: URL(string: movie.posterUrl))
                             .resizable()
-//                            .placeholder {
-//                                Rectangle()
-//                                    .fill(Color.gray.opacity(0.3))
-//                            }
                             .indicator(.activity)
                             .transition(.fade(duration: 0.3))
                             .aspectRatio(2/3,contentMode: .fit)
@@ -84,9 +82,13 @@ struct MovieDetailView: View {
                     isFavorite.toggle()
                     Task {
                         if isFavorite {
-                            try? await MovieService.shared.likeMovie(with: movieID)
+                            await viewModel.likeMovie(with: movieID)
                         } else {
-                            try? await MovieService.shared.unlikeMovie(with: movieID)
+                            await viewModel.unlikeMovie(with: movieID)
+                        }
+
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                            viewModel.alertMessage = nil
                         }
                     }
                 }) {
@@ -95,17 +97,22 @@ struct MovieDetailView: View {
                 }
             }
         }
-        .alert(viewModel.alertMessage ?? "", isPresented: Binding(
-            get: { viewModel.alertMessage != nil },
-            set: { if !$0 { viewModel.alertMessage = nil } }
-        )) {
-            Button("OK", role: .cancel) { }
-        }
+        .alert(alertText ?? "", isPresented: $showAlert) { }
         .task {
             await viewModel.fetchMovieDetails(with: movieID)
             if let movie = viewModel.movieDetails,
                let profile = try? await ProfileService.shared.fetchProfile() {
                 isFavorite = profile.likedMovies.contains(movie.id)
+            }
+        }
+        .onReceive(viewModel.$alertMessage.compactMap { $0 }) { message in
+            alertText = message
+            showAlert = true
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                showAlert = false
+                alertText = nil
+                viewModel.alertMessage = nil
             }
         }
     }
