@@ -41,6 +41,12 @@ class AuthService {
         }
         
         guard (200..<300).contains(httpResponse.statusCode) else {
+            if let responseString = String(data: data, encoding: .utf8) {
+                print("Server error response: \(responseString)")
+                if let message = try? JSONDecoder().decode(ServerError.self, from: data) {
+                    throw CustomError.decodingError(message.error ?? message.message ?? "Unknown error")
+                }
+            }
             throw CustomError.httpError(statusCode: httpResponse.statusCode)
         }
         
@@ -78,6 +84,12 @@ class AuthService {
         }
         
         guard (200..<300).contains(httpResponse.statusCode) else {
+            if let responseString = String(data: data, encoding: .utf8) {
+                print("Server error response: \(responseString)")
+                if let message = try? JSONDecoder().decode(ServerError.self, from: data) {
+                    throw CustomError.decodingError(message.error ?? message.message ?? "Unknown error")
+                }
+            }
             throw CustomError.httpError(statusCode: httpResponse.statusCode)
         }
         

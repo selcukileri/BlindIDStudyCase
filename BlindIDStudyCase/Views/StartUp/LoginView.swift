@@ -14,6 +14,7 @@ struct LoginView: View {
     @State private var email = "john@john.com"
     @State private var password = "password123"
     @State private var isRegistered = false
+    @State private var showAlert: Bool = false
 
     
     var body: some View {
@@ -47,12 +48,6 @@ struct LoginView: View {
                     .foregroundColor(Color.clrGreen)
                 }
                 .padding(.top, 8)
-
-                if let error = viewModel.errorMessage {
-                    Text(error)
-                        .foregroundColor(.red)
-                        .font(.footnote)
-                }
                 Spacer()
             }
             .padding(.top, 32)
@@ -67,6 +62,8 @@ struct LoginView: View {
                 isRegistered = newValue != nil
             }
         }
+        .hideKeyboardOnTap()
+        .dismissableAlert(message: $viewModel.errorMessage)
     }
 }
 

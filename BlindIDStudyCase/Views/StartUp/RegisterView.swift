@@ -20,48 +20,45 @@ struct RegisterView: View {
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 24) {
+            ZStack {
+                Color.clear // gesture'ın çalışması için gerekli
 
-                Group {
-                    CustomTextField(title: "Name", text: $name)
-                    CustomTextField(title: "Surname", text: $surname)
-                    CustomTextField(title: "Email", text: $email, keyboardType: .emailAddress)
-                    CustomSecureField(title: "Password", text: $password)
-                }
-
-                Button(action: {
-                    viewModel.register(name: name, surname: surname, email: email, password: password)
-                }) {
-                    Text("Register")
-                        .font(.title3.weight(.semibold))
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.clrGreen)
-                        .cornerRadius(10)
-                }
-                
-                HStack {
-                    Text("Already have an account?")
-                        .foregroundColor(.secondary)
-                    NavigationLink(destination: LoginView()) {
-                        Text("Login")
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundColor(Color.clrGreen)
+                VStack(spacing: 24) {
+                    Group {
+                        CustomTextField(title: "Name", text: $name)
+                        CustomTextField(title: "Surname", text: $surname)
+                        CustomTextField(title: "Email", text: $email, keyboardType: .emailAddress)
+                        CustomSecureField(title: "Password", text: $password)
                     }
-                }
-                .padding(.top, 8)
 
+                    Button(action: {
+                        viewModel.register(name: name, surname: surname, email: email, password: password)
+                    }) {
+                        Text("Register")
+                            .font(.title3.weight(.semibold))
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.clrGreen)
+                            .cornerRadius(10)
+                    }
 
-                if let error = viewModel.errorMessage {
-                    Text(error)
-                        .foregroundColor(.red)
-                        .font(.footnote)
+                    HStack {
+                        Text("Already have an account?")
+                            .foregroundColor(.secondary)
+                        NavigationLink(destination: LoginView()) {
+                            Text("Login")
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundColor(Color.clrGreen)
+                        }
+                    }
+                    .padding(.top, 8)
+
+                    Spacer()
                 }
-                Spacer()
+                .padding(.top, 32)
+                .padding(.horizontal)
             }
-            .padding(.top, 32)
-            .padding(.horizontal)
             .navigationTitle("Register")
             .navigationBarTitleDisplayMode(.large)
             .navigationBarBackButtonHidden(true)
@@ -71,6 +68,8 @@ struct RegisterView: View {
             .onChange(of: viewModel.token) { _, newValue in
                 isRegistered = newValue != nil
             }
+            .hideKeyboardOnTap()
+            .dismissableAlert(message: $viewModel.errorMessage)
         }
     }
 }

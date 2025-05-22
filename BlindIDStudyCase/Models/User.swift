@@ -12,6 +12,11 @@ struct AuthResponse: Codable {
     let user: User
 }
 
+struct ServerError: Decodable {
+    let message: String?
+    let error: String?
+}
+
 struct User: Codable {
     let id: String
     let name: String

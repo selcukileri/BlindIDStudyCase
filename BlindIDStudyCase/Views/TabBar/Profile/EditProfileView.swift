@@ -34,8 +34,6 @@ struct EditProfileView: View {
                 }
             }
             .navigationTitle("Edit Profile")
-            .alert(viewModel.alertMessage ?? "", isPresented: $showAlert) {
-            }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {

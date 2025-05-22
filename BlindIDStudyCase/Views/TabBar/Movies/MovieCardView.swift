@@ -33,7 +33,7 @@ struct MovieCardView: View {
                 .lineLimit(2)
                 .multilineTextAlignment(.leading)
             
-            HStack(spacing: 4) {
+            HStack(spacing: 8) {
                 Text("\(movie.year.description) • \(movie.rating)")
                     .font(.caption)
                     .foregroundColor(.secondary)
