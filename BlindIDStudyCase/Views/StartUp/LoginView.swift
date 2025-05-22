@@ -11,7 +11,7 @@ struct LoginView: View {
     
     @StateObject private var viewModel = AuthViewModel()
 
-    @State private var email = "john@example.com"
+    @State private var email = "john@john.com"
     @State private var password = "password123"
     @State private var isRegistered = false
 

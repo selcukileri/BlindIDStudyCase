@@ -104,7 +104,7 @@ struct MovieDetailView: View {
                 isFavorite = profile.likedMovies.contains(movie.id)
             }
         }
-        timedAlert(message: $viewModel.alertMessage)
+//        timedAlert(message: $viewModel.alertMessage)
     }
 }
 
