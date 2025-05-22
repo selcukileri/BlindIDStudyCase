@@ -21,7 +21,7 @@ struct RegisterView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.clear // gesture'ın çalışması için gerekli
+                Color.clear
 
                 VStack(spacing: 24) {
                     Group {

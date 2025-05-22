@@ -50,6 +50,7 @@ struct EditProfileView: View {
                     }
                 }
             }
+            .hideKeyboardOnTap()
             .timedAlert(message: $viewModel.alertMessage)
             .onAppear {
                 name = viewModel.profile?.name ?? ""
