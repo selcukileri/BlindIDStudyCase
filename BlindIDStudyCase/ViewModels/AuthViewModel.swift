@@ -18,13 +18,7 @@ class AuthViewModel: ObservableObject {
             do {
                 let response = try await AuthService.shared.login(email: email, password: password)
                 self.token = response.token
-                let saved = KeychainHelper.shared.save(key: "userToken", value: response.token)
-                print("token: \(response.token)")
-                if !saved {
-                    print("token couldnt be saved")
-                } else {
-                    print("token saved")
-                }
+                saveToken(response.token)
             } catch let error as CustomError {
                 self.errorMessage = error.localizedDescription
             } catch {
@@ -38,17 +32,22 @@ class AuthViewModel: ObservableObject {
             do {
                 let response = try await AuthService.shared.register(name: name, surname: surname, email: email, password: password)
                 self.token = response.token
-                let saved = KeychainHelper.shared.save(key: "userToken", value: response.token)
-                if !saved {
-                    print("token couldnt be saved")
-                } else {
-                    print("token saved")
-                }
+                saveToken(response.token)
             } catch let error as CustomError {
                 self.errorMessage = error.localizedDescription
             } catch {
                 self.errorMessage = error.localizedDescription
             }
+        }
+    }
+
+    private func saveToken(_ token: String) {
+        let saved = KeychainHelper.shared.save(key: "userToken", value: token)
+        print("token: \(token)")
+        if !saved {
+            print("token couldnt be saved")
+        } else {
+            print("token saved")
         }
     }
 }

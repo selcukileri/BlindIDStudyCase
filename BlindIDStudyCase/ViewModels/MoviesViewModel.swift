@@ -17,16 +17,7 @@ class MoviesViewModel: ObservableObject {
     @Published var alertMessage: String?
     
     func fetchMovies() async {
-        isLoading = true
-        errorMessage = nil
-        
-        do {
-            let movies = try await MovieService.shared.fetchMovies()
-            self.movies = movies
-        } catch {
-            self.errorMessage = error.localizedDescription
-        }
-        isLoading = false
+        await perform({ try await MovieService.shared.fetchMovies() }, assignTo: \.movies)
     }
     
     var categorizedMovies: [String: [Movie]] {
@@ -38,63 +29,40 @@ class MoviesViewModel: ObservableObject {
     }
     
     func fetchMovieDetails(with movieID: Int) async {
-        isLoading = true
-        errorMessage = nil
-        
-        do {
-            let movieDetails = try await MovieService.shared.fetchMovieDetails(movieId: movieID)
-            self.movieDetails = movieDetails
-        } catch {
-            self.errorMessage = error.localizedDescription
-        }
-        isLoading = false
+        await perform({ try await MovieService.shared.fetchMovieDetails(movieId: movieID) }, assignTo: \.movieDetails)
     }
     
     func fetchLikedMovies() async {
-        isLoading = true
-        errorMessage = nil
-        
-        do {
-            let movies = try await MovieService.shared.fetchMovies()
-            self.movies = movies
-        } catch {
-            self.errorMessage = error.localizedDescription
-        }
+        await perform({ try await MovieService.shared.fetchMovies() }, assignTo: \.movies)
     }
     
     func likeMovie(with movieId: Int) async {
-        isLoading = true
-        errorMessage = nil
-        
-        do {
-            let response = try await MovieService.shared.likeMovie(with: movieId)
-            self.alertMessage = response.message
-        } catch {
-            self.errorMessage = error.localizedDescription
-        }
-        isLoading = false
+        await perform({ try await MovieService.shared.likeMovie(with: movieId) }, showAlert: true)
     }
     
     func unlikeMovie(with movieId: Int) async {
-        isLoading = true
-        errorMessage = nil
-        
-        do {
-            let response = try await MovieService.shared.unlikeMovie(with: movieId)
-            self.alertMessage = response.message
-        } catch {
-            self.errorMessage = error.localizedDescription
-        }
-        isLoading = false
+        await perform({ try await MovieService.shared.unlikeMovie(with: movieId) }, showAlert: true)
     }
     
     func fetchLikedMovieIDs() async {
+        await perform({ try await MovieService.shared.fetchLikedMovieIDs() }, assignTo: \.likedMovieIDs)
+    }
+
+    private func perform<T>(
+        _ task: @escaping () async throws -> T,
+        assignTo keyPath: ReferenceWritableKeyPath<MoviesViewModel, T>? = nil,
+        showAlert: Bool = false
+    ) async {
         isLoading = true
         errorMessage = nil
-        
         do {
-            let ids = try await MovieService.shared.fetchLikedMovieIDs()
-            self.likedMovieIDs = ids
+            let result = try await task()
+            if let keyPath = keyPath {
+                self[keyPath: keyPath] = result
+            }
+            if showAlert, let messageResponse = result as? MessageResponse {
+                self.alertMessage = messageResponse.message
+            }
         } catch {
             self.errorMessage = error.localizedDescription
         }
